@@ -1,5 +1,7 @@
 package br.ce.wcaquino.taskbackend.controller;
 
+import static org.junit.Assert.assertEquals;
+
 import java.time.LocalDate;
 
 import org.junit.Assert;
@@ -10,11 +12,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import com.fasterxml.jackson.databind.Module.SetupContext;
+
 import br.ce.wcaquino.taskbackend.model.Task;
 import br.ce.wcaquino.taskbackend.repo.TaskRepo;
 import br.ce.wcaquino.taskbackend.utils.ValidationException;
 
-public class TaskControllerTest {
+public class TaskControllerTest2 {
 	
 	@Mock
 	private TaskRepo taskRepo;
@@ -26,16 +30,16 @@ public class TaskControllerTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 	}
-
+	
 	@Test
 	public void naoDeveSalvarTarefaSemDescricao() {
 		Task todo = new Task();
 		todo.setDueDate(LocalDate.now());
-		try {
-			controller.save(todo);
-			Assert.fail("Não deveria chegar nesse ponto!");
+	    try {
+				controller.save(todo);
+				Assert.fail("Não deveria chegar nesse ponto!");
 		} catch (ValidationException e) {
-			Assert.assertEquals("Fill the task description", e.getMessage());
+			assertEquals("Fill the task description", e.getMessage());
 		}
 	}
 	
@@ -43,11 +47,12 @@ public class TaskControllerTest {
 	public void naoDeveSalvarTarefaSemData() {
 		Task todo = new Task();
 		todo.setTask("Descricao");
-		try {
-			controller.save(todo);
-			Assert.fail("Não deveria chegar nesse ponto!");
+//	todo.setDueDate(LocalDate.now());
+	    try {
+	    		controller.save(todo);
+	    		Assert.fail("Não deveria chegar nesse ponto!");
 		} catch (ValidationException e) {
-			Assert.assertEquals("Fill the due date", e.getMessage());
+			assertEquals("Fill the due date", e.getMessage());
 		}
 	}
 	
@@ -56,11 +61,11 @@ public class TaskControllerTest {
 		Task todo = new Task();
 		todo.setTask("Descricao");
 		todo.setDueDate(LocalDate.of(2010, 01, 01));
-		try {
-			controller.save(todo);
-			Assert.fail("Não deveria chegar nesse ponto!");
+	    try {
+	    		controller.save(todo);
+	    		Assert.fail("Não deveria chegar nesse ponto!");
 		} catch (ValidationException e) {
-			Assert.assertEquals("Due date must not be in past", e.getMessage());
+			assertEquals("Due date must not be in past", e.getMessage());
 		}
 	}
 	
